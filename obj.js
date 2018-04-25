@@ -55,7 +55,7 @@ function Unit(x,y,r,dna)
 	this.r = r;
 	this.angle = 0; // angle to go forward
 	this.fitnes = 0; // how good unit is
-	this.speed = (wx*1.5) / (TIME*30);
+	this.speed = 5;//(wx*1.5) / (TIME*30) * SPEED;
 	this.time = 0; // how long was alive
 	this.alive = true;
 	this.win = false; // complete task (now)
@@ -76,9 +76,9 @@ function Unit(x,y,r,dna)
 		{
 			// DNA[index] == -1(left) 0(forward) 1(right)
 			if (this.dna[this.movePos] == -1)
-				this.angle -= 1.6*this.speed;
+				this.angle -= 10; //1.6*this.speed;
 			if (this.dna[this.movePos] == 1)
-				this.angle += 1.6*this.speed;
+				this.angle += 10;//1.6*this.speed;
 
 			if(this.angle > 360)
 				this.angle -= 360;

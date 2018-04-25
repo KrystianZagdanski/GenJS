@@ -6,8 +6,8 @@ canvas.height = wy;
 var ctx = canvas.getContext("2d");
 
 
-var TIME = 15; //Time to complete task
-var population = 200; // populatin size
+const TIME = 15; //Time to complete task
+var population = 100; // populatin size
 var map = map2;
 
 var gen = 0; // curent generation
