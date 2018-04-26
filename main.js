@@ -7,8 +7,9 @@ var ctx = canvas.getContext("2d");
 
 
 const TIME = 15; //Time to complete task
+const map = map2;
+var stop = false;
 var population = 100; // populatin size
-var map = map2;
 
 var gen = 0; // curent generation
 var timer = TIME; // count down
@@ -54,36 +55,37 @@ function Menu() // draw top left info
 
 function Timer() 
 {
-	if(timer > 0)
+	if(timer > 0 && !stop)
 		timer -= 1;
 }
 
 
 function Update(timestamp)
 {
-
-	if(alive <= 0 || timer == 0)
+	if(!stop)
 	{
-		Sort(); // sort pop best units first
-		setPool();
-		Fuck(); // umm push 15% of this gen to new gen, 85% create from parents
-		Mutation(); // change part of DNA for around 8% of population
-	}
-	//update
-	for(var i = 0; i < pop.length; i++)
-	{
-		pop[i].move();
-		pop[i].colide();
-	}
-	//draw
-	map.draw();
-
-	for(var i = pop.length-1; i >= 0 ; i--)
-	{
-		pop[i].draw();
-	}
-	Menu();
+		if(alive <= 0 || timer == 0)
+		{
+			Sort(); // sort pop best units first
+			setPool();
+			Fuck(); // umm push 15% of this gen to new gen, 85% create from parents
+			Mutation(); // change part of DNA for around 8% of population
+		}
+		//update
+		for(var i = 0; i < pop.length; i++)
+		{
+			pop[i].move();
+			pop[i].colide();
+		}
+		//draw
+		map.draw();
 	
+		for(var i = pop.length-1; i >= 0 ; i--)
+		{
+			pop[i].draw();
+		}
+		Menu();
+	}
 	//update (60FPS)
 	requestAnimationFrame(Update);
 }
