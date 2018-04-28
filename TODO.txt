@@ -1,7 +1,7 @@
  TODO:
     Another:
-    - Create `squer` class and rewrite colider to propperly detect colisions with them
-    ?- Create `colider` class 
+    DONE - Create `squer` class and rewrite colider to propperly detect colisions with them
+    DONE - Create `colider` class 
     - delete RColor() if not used
     - Change `pool` to be array with arrays with Unit id and fitnes score
     - 

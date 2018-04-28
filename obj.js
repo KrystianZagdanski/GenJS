@@ -16,38 +16,6 @@ function Circle(x, y, r, color) // target or obstacles
 	}
 }
 
-function Map(start, meta, struct)
-{
-	this.start = start;
-	this.meta = new Circle(meta.x,meta.y,25,"#060");
-	this.struct = struct;
-	this.open = function()
-	{
-		startPoint = this.start;
-		target = this.meta;
-		obstacles = this.struct;
-	}
-	this.draw = function()
-	{
-		ctx.beginPath()
-		ctx.fillStyle = "#000";
-		ctx.fillRect(0,0,wx,wy);
-
-		ctx.beginPath()
-		ctx.strokeStyle = "rgba(255,255,255,0.1)";
-		ctx.arc(start.x,start.y,30,0,2*Math.PI);
-		ctx.stroke();
-
-		for(var i =0; i < this.struct.length; i++)
-		{
-			this.struct[i].draw();
-		}
-
-		this.meta.draw();
-	}
-
-}
-
 function Unit(x,y,r,dna)
 {
 	this.x = x;
