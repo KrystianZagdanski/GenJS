@@ -56,7 +56,7 @@ function setPool() // set pool of index of units
 	}
 }
 
-function Fuck()
+function Fuck() // CHANGE THAT NAME!!!
 {
 	var x = 0;
 	while(newPop.length < Math.round(population * 0.15)) // push 15% of old pop DNA to new
@@ -85,7 +85,7 @@ function Fuck()
 		var u1 = pop[r1].dna;// get Unit DNA
 		var u2 = pop[r2].dna;
 
-		if(u1 === u2) // NO! They can't self-fuck
+		if(u1 === u2) // NO! They can't self-fuck   umm what? ohh
 			continue;
 
 		// slice DNA 1 and 2 and join like this 1-2-1-2   2-1-2-1

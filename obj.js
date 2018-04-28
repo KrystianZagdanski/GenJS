@@ -1,4 +1,4 @@
-function Circle(x,y,r, color) // target or obstacles
+function Circle(x, y, r, color) // target or obstacles
 {
 	this.x = x;
 	this.y = y;
@@ -11,7 +11,7 @@ function Circle(x,y,r, color) // target or obstacles
 	{
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
-		ctx.arc(this.x,this.y,this.r,0,2*Math.PI);
+		ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
 		ctx.fill();	
 	}
 }
@@ -82,10 +82,10 @@ function Unit(x,y,r,dna)
 
 			if(this.angle > 360)
 				this.angle -= 360;
-			if(this.angle < 360)
+			if(this.angle < 0)
 				this.angle += 360;
 			this.x += this.speed * Math.cos(this.angle * Math.PI / 180);
-    		this.y += this.speed * Math.sin(this.angle * Math.PI / 180);
+			this.y += this.speed * Math.sin(this.angle * Math.PI / 180);
 			
 			this.time++;
     		this.movePos++;
@@ -204,7 +204,7 @@ function Unit(x,y,r,dna)
 	if(this.dna.length <= 0) // if DNA was not created then create one
 	{
 		for(var i = 0; i < TIME*60; i++)
-		{
+		{``
 			this.dna.push(Rand(-1,2));
 		}
 	}
