@@ -9,7 +9,7 @@ var ctx = canvas.getContext("2d");
 const TIME = 15; //Time to complete task
 const map = map2;
 var stop = false;
-var population = 100; // populatin size
+var population = 100; // populatin size TODO: change to const POPULATON_SIZE
 
 var gen = 0; // curent generation
 var timer = TIME; // count down

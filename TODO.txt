@@ -3,13 +3,13 @@
     DONE - Create `squer` class and rewrite colider to propperly detect colisions with them
     DONE - Create `colider` class 
     - delete RColor() if not used
-    - Change `pool` to be array with arrays with Unit id and fitnes score
+    DONE - Change `pool` to be array with arrays with Unit id and fitnes score
     - 
     Unit:
     DONE - Change `angle` to `transformation` or something
     DONE - Add new varible that determine turn angle
-    - Change `time` to umm something else like "entero somewhere elso" (`time` should be value 
+    DONE - Change `time` to umm something else like "entero somewhere elso" (`time` should be value 
         from start to win, the shortest the better)
-    - Change fitness score added after win (it's too big)
-    - Add fitness at the end insted of in every damn place
+    DONE - Change fitness score added after win (it's too big)
+    DONE - Add fitness at the end insted of in every damn place
     DONE - Change `fitnes` to `fitness`
