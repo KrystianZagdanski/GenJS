@@ -1,6 +1,3 @@
-var wx = 1200;
-var wy = 700;
-
 var map1, map2, map3;
 var strc = [];
 
@@ -17,16 +14,16 @@ function Map(start, meta, struct)
 	}
 	this.draw = function()
 	{
-		ctx.beginPath()
+		ctx.beginPath();
 		ctx.fillStyle = "#000";
 		ctx.fillRect(0,0,wx,wy);
 
-		ctx.beginPath()
+		ctx.beginPath();
 		ctx.strokeStyle = "rgba(255,255,255,0.1)";
 		ctx.arc(start.x,start.y,30,0,2*Math.PI);
 		ctx.stroke();
 
-		for(var i =0; i < this.struct.length; i++)
+		for(let i =0; i < this.struct.length; i++)
 		{
 			this.struct[i].draw();
 		}

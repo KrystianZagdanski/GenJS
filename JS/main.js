@@ -1,37 +1,19 @@
-var wx =  1200;
-var wy = 700;
-var canvas = document.getElementById("canvas");
-canvas.width = wx;
-canvas.height = wy;
-var ctx = canvas.getContext("2d");
-
-
-const TIME = 15; //Time to complete task
+// config
+const TIME = 10; //Time to complete task
 const map = map2;
 var stop = false;
-var population = 100; // populatin size TODO: change to const POPULATON_SIZE
 
 var gen = 0; // curent generation
 var timer = TIME; // count down
 var alive = 0; // number of alive units
-var score = 0; // number of units that completed task (now)
-var lastScore = 0; // -||- generation before
-var bestScore = 0;
-var mutation = 0; // % of mutation it curent population
-var firstGoal = -1; // first generation when task was completed
-var above50 = -1; // 50% ofpopulation complete task
-var above80 = -1; // 80% of population coplete task
 
 var target; 
 var startPoint = {x: 100, y: wy/2};
 var obstacles = []; // object on the map
-var pop = []; // array of units (population)
-var newPop = []; // genes for nwe population
-var newPopWI = []; // few units that complete task in last generation (unit with white line)
-var newPopBI = []; // -||- that wsa close to complete task (unit with blue line)
-var pool = []; // just probability of being chosen
+var pop = new Population();
+map.open(); // prepare map
 
-function Menu() // draw top left info 
+function drawMenu() // draw top left info 
 {
 	var x = 10, y = 24;
 	ctx.fillStyle = "#fff";
@@ -59,6 +41,29 @@ function Timer()
 		timer -= 1;
 }
 
+function Rand(min, max)
+{
+	return Math.floor((Math.random() * (max-min) + min));
+}
+
+function distance(a,b) // return distace betwen 2 circles
+{
+	var dx = a.x - b.x;
+	var dy = a.y - b.y;
+	var dis = Math.sqrt(dx * dx + dy * dy);
+	return dis;
+}
+
+function resetValues()
+{
+	gen++;
+	alive = POPULATION_SIZE;
+	timer = TIME;
+	lastScore = score;
+	if(score > bestScore)
+		bestScore = score;
+	score = 0;
+}
 
 function Update(timestamp)
 {
@@ -66,32 +71,58 @@ function Update(timestamp)
 	{
 		if(alive <= 0 || timer == 0)
 		{
-			Sort(); // sort pop best units first
-			setPool();
-			Fuck(); // umm push 15% of this gen to new gen, 85% create from parents
-			Mutation(); // change part of DNA for around 8% of population
+			pop.calculateFitness();
+			pop.sort();
+			//console.log("Sorted:", pop.population);
+			pop.rewrite();
+			//console.log("rewrite:", pop.newPopulation);
+			pop.born();
+			//console.log("born:", pop.newPopulation);
+			pop.mutate();
+			//console.log("mute:", pop.newPopulation);
+			pop.applyNewPopulation();
+			//console.log("apply:", pop.newPopulation, pop.population);
+			resetValues();
 		}
 		//update
-		for(var i = 0; i < pop.length; i++)
+		for(let i = 0; i < POPULATION_SIZE; i++)
 		{
-			pop[i].move();
-			pop[i].colide();
+			pop.population[i].move();
+			if(pop.population[i].colider.colideWith(target))
+			{
+				pop.population[i].win = true;
+				score++;
+				alive--;
+				if(firstGoal == -1)
+					firstGoal = gen;
+				if(score >= Math.round(POPULATION_SIZE/2) && above50 == -1)
+					above50 = gen;
+				if(score >= Math.round(POPULATION_SIZE*0.8) && above80 == -1)
+					above80 = gen;
+			}
+			for(let x = 0; x < obstacles.length; x++)
+			{
+				//console.log(pop.population[i], obstacles[x], pop.population[i].colider.colideWith(obstacles[x]));	
+				if(pop.population[i].colider.colideWith(obstacles[x]))
+				{
+					pop.population[i].alive = false;
+					alive--;
+					break;
+				}
+			}
 		}
 		//draw
 		map.draw();
 	
-		for(var i = pop.length-1; i >= 0 ; i--)
+		for(var i = POPULATION_SIZE-1; i >= 0 ; i--)
 		{
-			pop[i].draw();
+			pop.population[i].draw();
 		}
-		Menu();
+		drawMenu();
 	}
 	//update (60FPS)
 	requestAnimationFrame(Update);
 }
-
-map.open(); // prepare map
-Create(); // create full population
 
 requestAnimationFrame(Update);
 var tm = setInterval(Timer,1000);

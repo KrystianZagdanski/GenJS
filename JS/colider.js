@@ -16,12 +16,27 @@ class Colider
             this.type = "circle";
         }
     }
+    update(x, y, w, h)
+    {
+        this.x = x;
+        this.y = y;
+        if(h)
+        {
+            this.w = w;
+            this.h = h;
+        }
+        else
+        {
+            this.r = w;
+        }
+    }
     colideWith(other)
     {
         if(this.type == "circle")
         {
-            if(this.type == other.type)
+            if(this.type == other.colider.type)
             {
+                //console.log("colider cc:", this, other);
                 let dx = this.x - other.x;
                 let dy = this.y - other.y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
@@ -36,7 +51,7 @@ class Colider
         }
         else
         {
-            if(this.type == other.type) // this squer other squer
+            if(this.type == other.colider.type) // this squer other squer
             {
                 let collisionX = rect1.x < rect2.x + rect2.width && rect1.x + rect1.width > rect2.x;
                 let collisionY = rect1.y < rect2.y + rect2.height && rect1.height + rect1.y > rect2.y;

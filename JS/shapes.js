@@ -11,7 +11,7 @@ class Circle
 		else
 			this.color = "#222";
 	}
-	draw(ctx)
+	draw()
 	{
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
@@ -34,7 +34,7 @@ class Squer
 		else
 			this.color = "#222";
 	}
-	draw(ctx)
+	draw()
 	{
 		ctx.fillStyle = this.color;
 		ctx.fillRect(this.x, this.y, this.w, this.h);

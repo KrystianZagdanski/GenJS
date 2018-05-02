@@ -54,6 +54,7 @@ class Unit
 				this.rotation += 360;
 			this.x += this.speed * Math.cos(this.rotation * Math.PI / 180);
     		this.y += this.speed * Math.sin(this.rotation * Math.PI / 180);
+			this.colider.update(this.x, this.y, this.r);
 			
 			this.ttc++;
     		this.movePos++;
