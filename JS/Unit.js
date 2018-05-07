@@ -37,7 +37,7 @@ class Unit
     }
     move()
     {
-        let currentDistance = distance(this,target);
+        let currentDistance = Distance(this,target);
 		if(currentDistance < this.distance)
 			this.distance = currentDistance;
 		if(this.alive && this.movePos < this.dna.length && !this.win)
@@ -48,10 +48,11 @@ class Unit
 			if (this.dna[this.movePos] == 1)
 				this.rotation += this.turnSpeed;
 
+			this.rotation %= 360;/*
 			if(this.rotation > 360)
 				this.rotation -= 360;
 			if(this.rotation < 0)
-				this.rotation += 360;
+				this.rotation += 360;*/
 			this.x += this.speed * Math.cos(this.rotation * Math.PI / 180);
     		this.y += this.speed * Math.sin(this.rotation * Math.PI / 180);
 			this.colider.update(this.x, this.y, this.r);

@@ -29,10 +29,9 @@ class Population
         {
             let fitness = wx - this.population[i].distance;
             if(this.population[i].win)
-                fitness -= this.population[i].ttc;
+                fitness -= this.population[i].ttc/60;
             else
-                fitness -= 2*this.population[i].ttc;
-        
+                fitness -= TIME;
             this.population[i].fitness = fitness;
         }
     }
@@ -40,13 +39,13 @@ class Population
     {
         this.population.sort(function(a, b){
             if (a.fitness > b.fitness)
-                return 1;
-            else if (a.fitness < b.fitness)
                 return -1;
+            else if (a.fitness < b.fitness)
+                return 1;
             else
                 return 0;
         });
-        console.log("Populatio after sort:",this.population.forEach((e)=>{e}));
+        //this.population.forEach((e)=>{console.log(e.fitness);});
     }
     rewrite()
     {
@@ -64,14 +63,27 @@ class Population
     {
         while(this.newPopulation.length < POPULATION_SIZE) // 85% of new pop are  born from parents 
         {
+            let randomUnits = [];
             let unit1, unit2;
             let dna1A, dna1B, dna1C, dna1D,
                 dna2A, dna2B, dna2C, dna2D;
             let dna1 = [], dna2 = [];
             
+            for(let i = 0; i < 10; i++)
+            {
+                randomUnits[i] = this.population[Rand(0, POPULATION_SIZE)];
+            }
+            randomUnits.sort((a, b)=>{
+                if(a.fitness > b.fitness)
+                    return -1;
+                else if(a.fitness < b.fitness)
+                    return 1;
+                else
+                    return 0;
+            });
             // TODO: get 4 random units and match better one
-            unit1 = this.population[Rand(0, POPULATION_SIZE)];
-            unit2 = this.population[Rand(0, POPULATION_SIZE)];
+            unit1 = randomUnits[0];
+            unit2 = randomUnits[1];
 
             if(unit1 === unit2)
                 continue;
@@ -90,13 +102,14 @@ class Population
             dna2[3] = unit1.dna.slice(3*sliceSize, 4*sliceSize);
 
             this.createUnit((dna1[0] + dna2[1] + dna1[2] + dna2[3]).split(","), this.newPopulation.length);
-            this.createUnit((dna2[0] + dna1[1] + dna2[2] + dna1[3]).split(","), this.newPopulation.length);
+            if(this.newPopulation.length < POPULATION_SIZE)
+                this.createUnit((dna2[0] + dna1[1] + dna2[2] + dna1[3]).split(","), this.newPopulation.length);
         }
     }
     mutate()
     {
         let m = 0, r, lvl;
-        for(let i = 0; i < POPULATION_SIZE; i++)
+        for(let i =  Math.round(POPULATION_SIZE * 0.15); i < POPULATION_SIZE; i++)
         {
             r = Math.random();
             if(r > 0.92) // around 8% of new pop change something in DNA

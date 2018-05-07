@@ -46,7 +46,7 @@ function Rand(min, max)
 	return Math.floor((Math.random() * (max-min) + min));
 }
 
-function distance(a,b) // return distace betwen 2 circles
+function Distance(a,b) // return distace betwen 2 circles
 {
 	var dx = a.x - b.x;
 	var dy = a.y - b.y;
@@ -57,7 +57,7 @@ function distance(a,b) // return distace betwen 2 circles
 function resetValues()
 {
 	gen++;
-	alive = POPULATION_SIZE;
+	alive = pop.population.length;
 	timer = TIME;
 	lastScore = score;
 	if(score > bestScore)
@@ -88,7 +88,7 @@ function Update(timestamp)
 		for(let i = 0; i < POPULATION_SIZE; i++)
 		{
 			pop.population[i].move();
-			if(pop.population[i].colider.colideWith(target))
+			if(!pop.population[i].win && pop.population[i].colider.colideWith(target))
 			{
 				pop.population[i].win = true;
 				score++;
@@ -103,7 +103,7 @@ function Update(timestamp)
 			for(let x = 0; x < obstacles.length; x++)
 			{
 				//console.log(pop.population[i], obstacles[x], pop.population[i].colider.colideWith(obstacles[x]));	
-				if(pop.population[i].colider.colideWith(obstacles[x]))
+				if(pop.population[i].alive && pop.population[i].colider.colideWith(obstacles[x]))
 				{
 					pop.population[i].alive = false;
 					alive--;
