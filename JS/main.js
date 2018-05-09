@@ -1,6 +1,6 @@
 // config
 const TIME = 10; //Time to complete task
-const map = map2;
+const map = map1;
 var stop = false;
 
 var gen = 0; // curent generation

@@ -29,9 +29,9 @@ class Population
         {
             let fitness = wx - this.population[i].distance;
             if(this.population[i].win)
-                fitness -= this.population[i].ttc/60;
+                fitness -= this.population[i].ttc;
             else
-                fitness -= TIME;
+                fitness -= TIME*60;
             this.population[i].fitness = fitness;
         }
     }
@@ -45,7 +45,7 @@ class Population
             else
                 return 0;
         });
-        //this.population.forEach((e)=>{console.log(e.fitness);});
+       // this.population.forEach((e)=>{console.log(e.fitness);});
     }
     rewrite()
     {
@@ -65,11 +65,9 @@ class Population
         {
             let randomUnits = [];
             let unit1, unit2;
-            let dna1A, dna1B, dna1C, dna1D,
-                dna2A, dna2B, dna2C, dna2D;
             let dna1 = [], dna2 = [];
             
-            for(let i = 0; i < 10; i++)
+            for(let i = 0; i < POPULATION_SIZE*0.1; i++)
             {
                 randomUnits[i] = this.population[Rand(0, POPULATION_SIZE)];
             }
@@ -81,24 +79,24 @@ class Population
                 else
                     return 0;
             });
-            // TODO: get 4 random units and match better one
+
             unit1 = randomUnits[0];
             unit2 = randomUnits[1];
 
             if(unit1 === unit2)
                 continue;
-
+            
             // slice DNA 1 and 2 and join like this 1-2-1-2   2-1-2-1
             let sliceSize = unit1.dna.length/4;
 
             dna1[0] = unit1.dna.slice(0, sliceSize);
-            dna1[1] = unit1.dna.slice(sliceSize, 2*sliceSize);
+            dna1[1] = unit2.dna.slice(sliceSize, 2*sliceSize);
             dna1[2] = unit1.dna.slice(2*sliceSize, 3*sliceSize);
-            dna1[3] = unit1.dna.slice(3*sliceSize, 4*sliceSize);
+            dna1[3] = unit2.dna.slice(3*sliceSize, 4*sliceSize);
 
-            dna2[0] = unit1.dna.slice(0, sliceSize);
+            dna2[0] = unit2.dna.slice(0, sliceSize);
             dna2[1] = unit1.dna.slice(sliceSize, 2*sliceSize);
-            dna2[2] = unit1.dna.slice(2*sliceSize, 3*sliceSize);
+            dna2[2] = unit2.dna.slice(2*sliceSize, 3*sliceSize);
             dna2[3] = unit1.dna.slice(3*sliceSize, 4*sliceSize);
 
             this.createUnit((dna1[0] + dna2[1] + dna1[2] + dna2[3]).split(","), this.newPopulation.length);
@@ -109,13 +107,13 @@ class Population
     mutate()
     {
         let m = 0, r, lvl;
-        for(let i =  Math.round(POPULATION_SIZE * 0.15); i < POPULATION_SIZE; i++)
+        for(let i = 0/*Math.round(POPULATION_SIZE * 0.15)*/; i < POPULATION_SIZE; i++)
         {
             r = Math.random();
             if(r > 0.92) // around 8% of new pop change something in DNA
             {
-                lvl = Rand(10,30); // change 10 - 30 parts of DNA
-                while(0 < lvl)
+                lvl = Rand(10,20); // change 10 - 20 parts of DNA
+                while(lvl > 0)
                 {
                     this.newPopulation[i].dna[Rand(0,this.newPopulation[i].dna.length)] = Rand(-1,2);
                     lvl--;

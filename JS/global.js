@@ -1,6 +1,6 @@
 const wx = 1200;
 const wy = 700;
-const POPULATION_SIZE = 100;
+const POPULATION_SIZE = 500;
 
 var canvas = document.getElementById("canvas");
 canvas.width = wx;
