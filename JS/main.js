@@ -1,6 +1,6 @@
 // config
 const TIME = 10; //Time to complete task
-const map = map1;
+const map = map2;
 var stop = false;
 
 var gen = 0; // curent generation
@@ -28,11 +28,11 @@ function drawMenu() // draw top left info
 		ctx.fillText("Score > 80%: "+above80,x+150,y+30);
 
 	ctx.fillText("Timer: "+timer,x,y+15);
-	ctx.fillText("Alive: "+alive,x,y+30);
-	ctx.fillText("Score: "+score,x,y+45);
-	ctx.fillText("Last: "+lastScore,x,y+60);
-	ctx.fillText("Best: "+bestScore,x,y+75);
-	ctx.fillText("Mutation: "+mutation+"%",x,y+90);
+	ctx.fillText("Mutation: "+mutation+"%",x,y+30);
+	ctx.fillText("Alive: "+alive,x,y+45);
+	ctx.fillText("Score: "+score,x,y+60);
+	ctx.fillText("Last: "+lastScore,x,y+75);
+	ctx.fillText("Best: "+bestScore,x,y+90);
 }
 
 function Timer() 
@@ -76,8 +76,8 @@ function Update(timestamp)
 			//console.log("Sorted:", pop.population);
 			pop.rewrite();
 			//console.log("rewrite:", pop.newPopulation);
-			pop.born();
-			//console.log("born:", pop.newPopulation);
+			pop.crossover();
+			//console.log("crossover:", pop.newPopulation);
 			pop.mutate();
 			//console.log("mute:", pop.newPopulation);
 			pop.applyNewPopulation();

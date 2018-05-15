@@ -11,7 +11,7 @@ class Unit
         this.r = r;
         this.rotation = 0;
         this.fitness = 0; // how good unit is
-		this.speed = 4;
+		this.speed = 5;
 		this.turnSpeed = 10;
         this.ttc = 0; // time to complete
         this.alive = true;
@@ -28,7 +28,7 @@ class Unit
         else
         {
             this.dna = [];
-            for(let i = 0; i < TIME*70; i++)
+            for(let i = 0; i < TIME*60; i++)
             {``
                 this.dna.push(Rand(-1,2));
             }
@@ -48,7 +48,11 @@ class Unit
 			if (this.dna[this.movePos] == 1)
 				this.rotation += this.turnSpeed;
 
-			this.rotation %= 360;
+			this.rotation %= 360;/*
+			if(this.rotation > 360)
+				this.rotation -= 360;
+			if(this.rotation < 0)
+				this.rotation += 360;*/
 			this.x += this.speed * Math.cos(this.rotation * Math.PI / 180);
     		this.y += this.speed * Math.sin(this.rotation * Math.PI / 180);
 			this.colider.update(this.x, this.y, this.r);
@@ -63,19 +67,19 @@ class Unit
 		{
 			if(this.lastWinner)
 			{
-				ctx.fillStyle = "rgba(71,71,190,0.2)";
+				ctx.fillStyle = "rgba(205,0,0,0.8)";
 				ctx.strokeStyle = "white";
-				ctx.lineWidth = 3;
+				ctx.lineWidth = 4;
 			}
 			else if(this.best)
 			{
-				ctx.fillStyle = "rgba(51,170,51,0.1)";
+				ctx.fillStyle = "rgba(170,51,51,0.5)";
 				ctx.strokeStyle = "rgba(0,0,255,0.5)";
-				ctx.lineWidth = 3;
+				ctx.lineWidth = 4;
 			}
 			else
 			{
-				ctx.fillStyle = "rgba(170,51,51,0.1)";
+				ctx.fillStyle = "rgba(170,51,51,0.3)";
 				ctx.strokeStyle = "rgba(255,165,0,0.5)";
 				ctx.lineWidth = 3;
 			}
