@@ -6,13 +6,15 @@ class Population
         this.newPopulation = [];
         this.createPopulation();
     }
-    createUnit(dna,index,winer,best)
+    createUnit(dna,winer,best)
     {
-        this.newPopulation[index] = new Unit(startPoint.x, startPoint.y, 10, dna);
+        //this.newPopulation[index] = new Unit(startPoint.x, startPoint.y, 10, dna);
+        this.newPopulation.push(new Unit(startPoint.x, startPoint.y, 10, dna));
+
         if(winer)
-            this.newPopulation[index].lastWinner = true;
+            this.newPopulation[this.newPopulation.length-1].lastWinner = true;
         if(best)
-            this.newPopulation[index].best = true;
+            this.newPopulation[this.newPopulation.length-1].best = true;
     }
 
     createPopulation()
@@ -25,6 +27,10 @@ class Population
     }
     calculateFitness()
     {
+        let fitnessSum = 0;
+        /*
+            Add fitness score to all units
+        */
         for(let i = 0; i < this.population.length; i++)
         {
             let fitness = wx - this.population[i].distance;
@@ -34,14 +40,28 @@ class Population
                 fitness -= TIME;
             this.population[i].fitness = fitness;
         }
+        /*
+            Get sum of all fitness
+        */
+        for(let i = 0; i < this.population.length; i++)
+        {
+            fitnessSum += this.population[i].fitness;
+        }
+        /*
+            normalize fitness score
+        */
+        for(let i = 0; i < this.population.length; i++)
+        {
+            this.population[i].fitness /= fitnessSum;
+        }
     }
     sort()
     {
         this.population.sort(function(a, b){
             if (a.fitness > b.fitness)
-                return -1;
-            else if (a.fitness < b.fitness)
                 return 1;
+            else if (a.fitness < b.fitness)
+                return -1;
             else
                 return 0;
         });
@@ -49,41 +69,48 @@ class Population
     }
     rewrite()
     {
-        let x = 0;
+        let x = this.population.length-1;
+
+        this.newPopulation = [];
+
         while(this.newPopulation.length < Math.round(POPULATION_SIZE * 0.15)) // push 15% of old pop DNA to new
         {
             let dna = this.population[x].dna,
                 win = this.population[x].win,
                 best = !win;
-            this.createUnit(dna, x, win, best);
-            x++;
+            this.createUnit(dna, win, best);
+            x--;
         }
     }
-    born()
+    select()
+    {
+        let i = 0, r, sum = 0;
+        r = Math.random();
+        while(sum < r)
+        {
+            sum += this.population[i].fitness;
+            i++;
+        }
+        if(i == POPULATION_SIZE)
+            --i;
+        //console.log(r,sum, i);
+        return i;
+    }
+    crossover()
     {
         while(this.newPopulation.length < POPULATION_SIZE) // 85% of new pop are  born from parents 
         {
             let randomUnits = [];
             let unit1, unit2;
+            let sum = 0, r;
             let dna1A, dna1B, dna1C, dna1D,
                 dna2A, dna2B, dna2C, dna2D;
             let dna1 = [], dna2 = [];
-            
-            for(let i = 0; i < 10; i++)
-            {
-                randomUnits[i] = this.population[Rand(0, POPULATION_SIZE)];
-            }
-            randomUnits.sort((a, b)=>{
-                if(a.fitness > b.fitness)
-                    return -1;
-                else if(a.fitness < b.fitness)
-                    return 1;
-                else
-                    return 0;
-            });
-            // TODO: get 4 random units and match better one
-            unit1 = randomUnits[0];
-            unit2 = randomUnits[1];
+
+            unit1 = this.population[this.select()];
+            unit2 = this.population[this.select()];
+
+            //console.log(unit1, unit2);
 
             if(unit1 === unit2)
                 continue;
@@ -101,9 +128,9 @@ class Population
             dna2[2] = unit1.dna.slice(2*sliceSize, 3*sliceSize);
             dna2[3] = unit1.dna.slice(3*sliceSize, 4*sliceSize);
 
-            this.createUnit((dna1[0] + dna2[1] + dna1[2] + dna2[3]).split(","), this.newPopulation.length);
+            this.createUnit((dna1[0] + dna2[1] + dna1[2] + dna2[3]).split(","));
             if(this.newPopulation.length < POPULATION_SIZE)
-                this.createUnit((dna2[0] + dna1[1] + dna2[2] + dna1[3]).split(","), this.newPopulation.length);
+                this.createUnit((dna2[0] + dna1[1] + dna2[2] + dna1[3]).split(","));
         }
     }
     mutate()

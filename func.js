@@ -3,7 +3,7 @@ function Rand(min, max)
 	return Math.floor((Math.random() * (max-min) + min));
 }
 
-function RColor() // hmm i didn't use it
+function RColor()
 {
 	var HEX = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
 	h = "#";
@@ -14,7 +14,7 @@ function RColor() // hmm i didn't use it
 	return h;
 }
 
-function distance(a,b) // return distace betwen 2 circles
+function distance(a,b)
 {
 	var dx = a.x - b.x;
 	var dy = a.y - b.y;
@@ -22,13 +22,13 @@ function distance(a,b) // return distace betwen 2 circles
 	return dis;
 }
 
-function colide(cir1,cir2) // check if circles colide
+function colide(cir1,cir2)
 {
 	var dis = distance(cir1,cir2);
 	return dis <= cir1.r + cir2.r;
 }
 
-function Sort() // sort population
+function Sort()
 {
 	var cmpr = function(a,b)
 	{
@@ -45,7 +45,7 @@ function Sort() // sort population
 	pop.sort(cmpr);
 }
 
-function setPool() // set pool of index of units
+function setPool()
 {
 	for(var i = 0; i < pop.length; i++)
 	{
@@ -56,12 +56,12 @@ function setPool() // set pool of index of units
 	}
 }
 
-function Fuck() // CHANGE THAT NAME!!!
+function Fuck()
 {
 	var x = 0;
-	while(newPop.length < Math.round(population * 0.15)) // push 15% of old pop DNA to new
+	while(newPop.length < Math.round(population * 0.15))
 	{
-		if(Math.random() > 0.1) // 90% for top Unit to get rewrite
+		if(Math.random() > 0.1)
 		{
 			newPop.push(pop[x].dna);
 			if(pop[x].win)
@@ -70,25 +70,24 @@ function Fuck() // CHANGE THAT NAME!!!
 				newPopBI.push(newPop.length-1);
 
 		}
-		else // 10% other random get lucky
+		else
 		{
 			var r = pool[Rand(x,pool.length)];
 			newPop.push(pop[r].dna);
 		}
 		x++;
 	}
-	while(newPop.length < population) // 85% of new pop are  born from parents 
+	while(newPop.length < population)
 	{
-		var r1 = pool[Rand(0,pool.length)]; // get random index from pool
-		var r2 = pool[Rand(0,pool.length)]; 
+		var r1 = pool[Rand(0,pool.length)];
+		var r2 = pool[Rand(0,pool.length)];
 		
-		var u1 = pop[r1].dna;// get Unit DNA
+		var u1 = pop[r1].dna;
 		var u2 = pop[r2].dna;
 
-		if(u1 === u2) // NO! They can't self-fuck   umm what? ohh
+		if(u1 === u2)
 			continue;
 
-		// slice DNA 1 and 2 and join like this 1-2-1-2   2-1-2-1
 		var l = u1.length/4;
 
 		var u1a = u1.slice(0,l);
@@ -114,16 +113,15 @@ function Mutation()
 	for(var i = 0; i < newPop.length; i++)
 	{
 		var r = Math.random();
-		if(r > 0.92) // around 8% of new pop change something in DNA
+		if(r > 0.92)
 		{
 			m++;
-			var lvl = Rand(10,50); // change 10 - 49 parts of DNA
+			var lvl = Rand(10,50);
 			for(; 0 < lvl; lvl--)
 			{
 				newPop[i][Rand(0,newPop[i].length)] = Rand(-1,2);
 			}
 		}
-		// Create new population
 		if(i == newPopWI[lw])
 		{
 			CreteOne(newPop[i],i, true);
@@ -138,7 +136,6 @@ function Mutation()
 			CreteOne(newPop[i],i);
 	}
 
-	// Set values to start new generation
 	gen++;
 	alive = newPop.length;
 	timer = TIME;

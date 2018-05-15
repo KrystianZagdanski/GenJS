@@ -1,4 +1,4 @@
-function Circle(x, y, r, color) // target or obstacles
+function Circle(x,y,r, color)
 {
 	this.x = x;
 	this.y = y;
@@ -11,9 +11,41 @@ function Circle(x, y, r, color) // target or obstacles
 	{
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
+		ctx.arc(this.x,this.y,this.r,0,2*Math.PI);
 		ctx.fill();	
 	}
+}
+
+function Map(start, meta, struct)
+{
+	this.start = start;
+	this.meta = new Circle(meta.x,meta.y,25,"#060");
+	this.struct = struct;
+	this.open = function()
+	{
+		startPoint = this.start;
+		target = this.meta;
+		obstacles = this.struct;
+	}
+	this.draw = function()
+	{
+		ctx.beginPath()
+		ctx.fillStyle = "#000";
+		ctx.fillRect(0,0,wx,wy);
+
+		ctx.beginPath()
+		ctx.strokeStyle = "rgba(255,255,255,0.1)";
+		ctx.arc(start.x,start.y,30,0,2*Math.PI);
+		ctx.stroke();
+
+		for(var i =0; i < this.struct.length; i++)
+		{
+			this.struct[i].draw();
+		}
+
+		this.meta.draw();
+	}
+
 }
 
 function Unit(x,y,r,dna)
@@ -21,16 +53,16 @@ function Unit(x,y,r,dna)
 	this.x = x;
 	this.y = y;
 	this.r = r;
-	this.angle = 0; // angle to go forward
-	this.fitnes = 0; // how good unit is
-	this.speed = 5;//(wx*1.5) / (TIME*30) * SPEED;
-	this.time = 0; // how long was alive
+	this.angle = 0;
+	this.fitnes = 0;
+	this.speed = (wx*1.5) / (TIME*30);
+	this.time = 0;
 	this.alive = true;
-	this.win = false; // complete task (now)
-	this.lastWinner = false; // complete task in last gen and was put in new gen
-	this.best = false; // -||- was close 
-	this.dis = 999999; // distance from target
-	this.movePos = 0; // index of move in DNA
+	this.win = false;
+	this.lastWinner = false;
+	this.best = false;
+	this.dis = 999999;
+	this.movePos = 0;
 	if(dna)
 		this.dna = dna;
 	else
@@ -42,28 +74,27 @@ function Unit(x,y,r,dna)
 			this.dis = d;
 		if(this.alive && this.movePos < this.dna.length && !this.win)
 		{
-			// DNA[index] == -1(left) 0(forward) 1(right)
 			if (this.dna[this.movePos] == -1)
-				this.angle -= 10; //1.6*this.speed;
+				this.angle -= 1.6*this.speed;
 			if (this.dna[this.movePos] == 1)
-				this.angle += 10;//1.6*this.speed;
+				this.angle += 1.6*this.speed;
 
 			if(this.angle > 360)
 				this.angle -= 360;
-			if(this.angle < 0)
+			if(this.angle < 360)
 				this.angle += 360;
 			this.x += this.speed * Math.cos(this.angle * Math.PI / 180);
-			this.y += this.speed * Math.sin(this.angle * Math.PI / 180);
+    		this.y += this.speed * Math.sin(this.angle * Math.PI / 180);
 			
 			this.time++;
     		this.movePos++;
 		}
 	}
-	this.colide = function() // check if colide
+	this.colide = function()
 	{
 		if(this.alive && !this.win)
 		{
-			if(colide(this,target)) // if win then have beter fitnes, check if after "win" task was completed
+			if(colide(this,target))
 			{
 				this.win = true;
 				var scr = this.dis - (this.time/60);
@@ -96,7 +127,7 @@ function Unit(x,y,r,dna)
 			if(!this.alive)
 				alive -= 1;
 		}
-		else if(this.fitnes == 0) // if it's dead/win and hve no fitnes, give fitnes
+		else if(this.fitnes == 0)
 		{
 			if(wx - this.dis <= 0)
 				this.fitnes = 1;
@@ -169,10 +200,10 @@ function Unit(x,y,r,dna)
 		ctx.stroke();
 	}
 
-	if(this.dna.length <= 0) // if DNA was not created then create one
+	if(this.dna.length <= 0)
 	{
 		for(var i = 0; i < TIME*60; i++)
-		{``
+		{
 			this.dna.push(Rand(-1,2));
 		}
 	}
