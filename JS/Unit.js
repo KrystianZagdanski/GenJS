@@ -1,9 +1,5 @@
 class Unit
 {
-    /*
-        dis -> distance 
-        d -> currentDistance
-    */
     constructor(x, y, r, dna)
     {
         this.x = x;
@@ -18,7 +14,8 @@ class Unit
         this.win = false; // complete task (now)
         this.lastWinner = false; // complete task in last gen and was put in new gen
         this.best = false; // -||- was close 
-        this.distance = 999999; // distance from target
+		this.distance = 999999; // distance from target
+		this.bestDistance = 999999;
 		this.movePos = 0; // index of move in DNA
 		this.colider = new Colider(this.x, this.y, this.r);
         if(dna)
@@ -28,7 +25,7 @@ class Unit
         else
         {
             this.dna = [];
-            for(let i = 0; i < TIME*60; i++)
+            for(let i = 0; i < TIME+100; i++)
             {``
                 this.dna.push(Rand(-1,2));
             }
@@ -38,21 +35,18 @@ class Unit
     move()
     {
         let currentDistance = Distance(this,target);
-		if(currentDistance < this.distance)
-			this.distance = currentDistance;
+		if(currentDistance < this.bestDistance)
+			this.bestDistance = currentDistance;
+		this.distance = currentDistance;
 		if(this.alive && this.movePos < this.dna.length && !this.win)
 		{
-			// DNA[index] == -1(left) 0(forward) 1(right)
+			// DNA: -1(left) 0(forward) 1(right)
 			if (this.dna[this.movePos] == -1)
 				this.rotation -= this.turnSpeed;
 			if (this.dna[this.movePos] == 1)
 				this.rotation += this.turnSpeed;
 
-			this.rotation %= 360;/*
-			if(this.rotation > 360)
-				this.rotation -= 360;
-			if(this.rotation < 0)
-				this.rotation += 360;*/
+			this.rotation %= 360;
 			this.x += this.speed * Math.cos(this.rotation * Math.PI / 180);
     		this.y += this.speed * Math.sin(this.rotation * Math.PI / 180);
 			this.colider.update(this.x, this.y, this.r);
@@ -73,13 +67,13 @@ class Unit
 			}
 			else if(this.best)
 			{
-				ctx.fillStyle = "rgba(170,51,51,0.5)";
+				ctx.fillStyle = "rgba(170,51,51,0.2)";
 				ctx.strokeStyle = "rgba(0,0,255,0.5)";
 				ctx.lineWidth = 4;
 			}
 			else
 			{
-				ctx.fillStyle = "rgba(170,51,51,0.3)";
+				ctx.fillStyle = "rgba(170,51,51,0.2)";
 				ctx.strokeStyle = "rgba(255,165,0,0.5)";
 				ctx.lineWidth = 3;
 			}
