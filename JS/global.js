@@ -1,10 +1,10 @@
-const wx = 1200;
-const wy = 700;
-const POPULATION_SIZE = 500;
+const canvasW = 1200;
+const canvasH = 700;
+const POPULATION_SIZE = 100;
 
 var canvas = document.getElementById("canvas");
-canvas.width = wx;
-canvas.height = wy;
+canvas.width = canvasW;
+canvas.height = canvasH;
 var ctx = canvas.getContext("2d");
 
 var score = 0; // number of units that completed task (now)

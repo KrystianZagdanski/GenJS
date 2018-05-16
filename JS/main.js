@@ -1,5 +1,5 @@
 // config
-const TIME = 10; //Time to complete task
+const TIME = 10*60; //Time to complete task
 const map = map2;
 var stop = false;
 
@@ -8,10 +8,15 @@ var timer = TIME; // count down
 var alive = 0; // number of alive units
 
 var target; 
-var startPoint = {x: 100, y: wy/2};
+var startPoint = {x: 100, y: canvasH/2};
 var obstacles = []; // object on the map
 var pop = new Population();
 map.open(); // prepare map
+
+function Stop()
+{
+	stop = !stop;
+}
 
 function drawMenu() // draw top left info 
 {
@@ -119,10 +124,12 @@ function Update(timestamp)
 			pop.population[i].draw();
 		}
 		drawMenu();
+		if(timer > 0)
+			timer -= 1;
 	}
 	//update (60FPS)
 	requestAnimationFrame(Update);
 }
 
 requestAnimationFrame(Update);
-var tm = setInterval(Timer,1000);
+//var tm = setInterval(Timer,1000);
