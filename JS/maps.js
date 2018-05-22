@@ -1,4 +1,4 @@
-var map1, map2, map3;
+var map1, map2, map3, map4;
 var strc = [];
 
 function Map(start, meta, struct)
@@ -32,6 +32,7 @@ function Map(start, meta, struct)
 	}
 }
 
+// map1
 strc[0] = new Circle(canvasW/2,canvasH/2,canvasH*0.25);
 //walls
 strc[1] = new Squer(0, 0, canvasW, 5);
@@ -39,7 +40,9 @@ strc[2] = new Squer(0, canvasH-5, canvasW, 5);
 strc[3] = new Squer(0, 0, 5, canvasH);
 strc[4] = new Squer(canvasW-5, 0, 5, canvasH);
 map1 = new Map({x :100, y :canvasH/2}, {x: canvasW-100, y: canvasH/2}, strc);
+// map1 end
 
+// map 2
 strc =[];
 strc[0] = new Circle(canvasW/2,canvasH/2,canvasH*0.25);
 strc[1] = new Circle(canvasW*0.75,canvasH*0.2,canvasH*0.2);
@@ -52,7 +55,9 @@ strc[6] = new Squer(0, canvasH-5, canvasW, 5);
 strc[7] = new Squer(0, 0, 5, canvasH);
 strc[8] = new Squer(canvasW-5, 0, 5, canvasH);
 map2 = new Map({x :100, y :canvasH/2}, {x: canvasW-100, y: canvasH/2}, strc);
+// map2 end
 
+// map3
 strc = [];
 strc[0] = new Circle(canvasW*0.445,canvasH*0.25,175);
 strc[1] = new Circle(canvasW*0.565,canvasH*0.75,175);
@@ -62,7 +67,9 @@ strc[3] = new Squer(0, canvasH-5, canvasW, 5);
 strc[4] = new Squer(0, 0, 5, canvasH);
 strc[5] = new Squer(canvasW-5, 0, 5, canvasH);
 map3 = new Map({x :100, y :canvasH/2}, {x: canvasW-100, y: canvasH/2}, strc);
+// map3 end
 
+// map4
 strc = [];
 strc[0] = new Squer(canvasW/2-250, canvasH/2-15, 500, 30);
 strc[1] = new Squer(canvasW/2-250, canvasH/2-85, 500, 30);
@@ -75,3 +82,4 @@ strc[6] = new Squer(0, canvasH-5, canvasW, 5);
 strc[7] = new Squer(0, 0, 5, canvasH);
 strc[8] = new Squer(canvasW-5, 0, 5, canvasH);
 map4 = new Map({x :100, y :canvasH/2}, {x: canvasW-100, y: canvasH/2}, strc);
+// map4 end

@@ -30,19 +30,21 @@ class Colider
             this.r = w;
         }
     }
+    /* 
+        Check for colision
+    */
     colideWith(other)
     {
         if(this.type == "circle")
         {
             if(this.type == other.colider.type)
             {
-                //console.log("colider cc:", this, other);
                 let dx = this.x - other.x;
                 let dy = this.y - other.y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
                 return distance <= this.r + other.r;
             }
-            else // this circle other squer
+            else // this circle, other squer
             {
                 let deltaX = this.x - Math.max(other.x, Math.min(this.x, other.x + other.w));
                 let deltaY = this.y - Math.max(other.y, Math.min(this.y, other.y + other.h));
@@ -51,13 +53,13 @@ class Colider
         }
         else
         {
-            if(this.type == other.colider.type) // this squer other squer
+            if(this.type == other.colider.type) // this squer, other squer
             {
                 let collisionX = rect1.x < rect2.x + rect2.width && rect1.x + rect1.width > rect2.x;
                 let collisionY = rect1.y < rect2.y + rect2.height && rect1.height + rect1.y > rect2.y;
                 return collisionX && collisionY;
             }
-            else // this squer oter circle
+            else // this squer, oter circle
             {
                 let deltaX = other.x - Math.max(this.x, Math.min(other.x, this.x + this.w));
                 let deltaY = other.y - Math.max(this.y, Math.min(other.y, this.y + this.h));

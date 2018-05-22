@@ -2,50 +2,60 @@ class Population
 {
     constructor()
     {
-        this.population = Array(POPULATION_SIZE);
-        this.newPopulation = [];
+        this.units = Array(POPULATION_SIZE);
+        this.newUnits = [];
         this.createPopulation();
     }
+    /*
+        Create single unit with specify dna
+    */
     createUnit(dna,winer,best)
     {
-        this.newPopulation.push(new Unit(startPoint.x, startPoint.y, 10, dna));
+        this.newUnits.push(new Unit(startPoint.x, startPoint.y, 10, dna));
 
         if(winer)
-            this.newPopulation[this.newPopulation.length-1].lastWinner = true;
+            this.newUnits[this.newUnits.length-1].lastWinner = true;
         if(best)
-            this.newPopulation[this.newPopulation.length-1].best = true;
+            this.newUnits[this.newUnits.length-1].best = true;
     }
-
+    /*
+        Create whole new population with random dna
+    */
     createPopulation()
     {
         for(var i = 0; i < POPULATION_SIZE; i++)
         {
-            this.population[i] = new Unit(startPoint.x, startPoint.y, 10);
+            this.units[i] = new Unit(startPoint.x, startPoint.y, 10);
             alive += 1;
         }
     }
+    /*
+        Calculate and add fitness score to all units
+    */
     calculateFitness()
     {
-        /*
-            Add fitness score to all units
-        */
-        for(let i = 0; i < this.population.length; i++)
+        for(let i = 0; i < this.units.length; i++)
         {
             let fitness = 0;
             let score = Distance(startPoint, target);
-            fitness += (score - this.population[i].distance);
-            fitness += (score - this.population[i].bestDistance)*0.5;
-            fitness -= this.population[i].ttc;
-            console.log(this.population[i].ttc);
+
+            fitness += (score - this.units[i].distance);
+            fitness += (score - this.units[i].bestDistance)*0.5;
+            if(this.units[i].win)
+                fitness += TIME - this.units[i].ttc*0.3;
+
             if(fitness < 0)
                 fitness = 0;
 
-            this.population[i].fitness = fitness;
+            this.units[i].fitness = fitness;
         }
     }
+    /*
+        Sort units from best to worst depends on fitness
+    */
     sort()
     {
-        this.population.sort(function(a, b){
+        this.units.sort(function(a, b){
             if (a.fitness > b.fitness)
                 return -1;
             else if (a.fitness < b.fitness)
@@ -53,58 +63,65 @@ class Population
             else
                 return 0;
         });
-        //this.population.forEach((e)=>{console.log(e.fitness);});
+        //this.units.forEach((e)=>{console.log(e.fitness);}); // test
     }
+    /* 
+        Rewrite best 15% of population
+    */
     rewrite()
     {
         let x = 0;
-        this.newPopulation = [];
+        this.newUnits = [];
 
-        while(this.newPopulation.length < Math.round(POPULATION_SIZE * 0.15)) // push 15% of old pop DNA to new
+        while(this.newUnits.length < Math.round(POPULATION_SIZE * 0.15))
         {
-            let dna = this.population[x].dna,
-                win = this.population[x].win,
+            let dna = this.units[x].dna,
+                win = this.units[x].win,
                 best = !win;
             this.createUnit(dna, win, best);
             x++;
         }
     }
+    /* 
+        Select and return index of Unit
+    */
     select()
     {
         let i = 0, r;  
-        let sum = this.population[0].fitness;
+        let sum = this.units[0].fitness;
         let fitnessSum = 0;
-        for(let i = 0; i < this.population.length; i++)
+        for(let i = 0; i < this.units.length; i++)
         {
-            fitnessSum += this.population[i].fitness;
+            fitnessSum += this.units[i].fitness;
         }
 
         r = Rand(0, fitnessSum+1);
 
         while(sum < r && i+1 < POPULATION_SIZE)
         {
-            sum += this.population[++i].fitness;
+            sum += this.units[++i].fitness;
         }
-        //console.log(fitnessSum, sum);
         return i;
         
     }
+    /* 
+        Create new Units from selected parents
+    */
     crossover()
     {
-        while(this.newPopulation.length < POPULATION_SIZE) // 85% of new pop are born from parents 
+        while(this.newUnits.length < POPULATION_SIZE)
         {
             let randomUnits = [];
             let unit1, unit2;
             let dna1 = [], dna2 = [];
 
-            unit1 = this.population[this.select()];
-            unit2 = this.population[this.select()];
-
-            //console.log(unit1.fitness, unit2.fitness, "max:"+this.population[0].fitness +" min:"+this.population[POPULATION_SIZE-1].fitness);
+            let s1 = this.select(), s2 = this.select();
+            unit1 = this.units[s1];
+            unit2 = this.units[s2];
 
             if(unit1 === unit2)
                 continue;
-
+            
             let crossPoint = Rand(10, unit1.dna.length-10);
             dna1[0] = unit1.dna.slice(0,crossPoint);
             dna1[1] = unit2.dna.slice(crossPoint,unit1.dna.length);
@@ -113,32 +130,36 @@ class Population
             dna2[1] = unit1.dna.slice(crossPoint,unit1.dna.length);
 
             this.createUnit((dna1[0] + [,] + dna1[1]).split(","));
-            if(this.newPopulation.length < POPULATION_SIZE)
+            if(this.newUnits.length < POPULATION_SIZE)
                 this.createUnit((dna2[0] +[,]+ dna2[1]).split(","));
         }
     }
+    /* 
+        Mutate fiew Units in new population
+    */
     mutate()
     {
         let m = 0, r, lvl;
         for(let i = 0; i < POPULATION_SIZE; i++)
         {
             r = Math.random();
-            if(r > 0.92) // around 8% of new pop change something in DNA
+            if(r > 0.92)
             {
-                lvl = Rand(5,15); // change 10 - 20 parts of DNA
+                lvl = Rand(1,10); // change 1 - 9 parts of DNA
                 while(0 < lvl)
                 {
-                    this.newPopulation[i].dna[Rand(0,this.newPopulation[i].dna.length)] = Rand(-1,2);
+                    this.newUnits[i].dna[Rand(0,this.newUnits[i].dna.length)] = Rand(-1,2);
                     lvl--;
                 }
-                m++;
+                m++; // mutation rate couter
             }
         }
         mutation = Math.round((m/POPULATION_SIZE)*100);
     }
+    
     applyNewPopulation()
     {
-        this.population = Object.assign([],this.newPopulation);
-        this.newPopulation = [];
+        this.units = Object.assign([],this.newUnits);
+        this.newUnits = [];
     }
 }

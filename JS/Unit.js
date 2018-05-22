@@ -5,19 +5,22 @@ class Unit
         this.x = x;
         this.y = y;
         this.r = r;
-        this.rotation = 0;
-        this.fitness = 0; // how good unit is
-		this.speed = 5;
+		this.rotation = 0;
+
+		this.speed = 4;
 		this.turnSpeed = 10;
-        this.ttc = 0; // time to complete
+		
+        this.fitness = 0; // how good unit is
+        this.ttc = 0; // Time To Complete task
         this.alive = true;
-        this.win = false; // complete task (now)
-        this.lastWinner = false; // complete task in last gen and was put in new gen
-        this.best = false; // -||- was close 
-		this.distance = 999999; // distance from target
-		this.bestDistance = 999999;
+        this.win = false; // complete task (in this generation)
+        this.lastWinner = false; // complete task in last gen and was rewrite to new generation
+        this.best = false; // was one of the best in last gen and was rewrite to new generation
+		this.distance = 999999; // distance from target (curent)
+		this.bestDistance = 999999; // closest distance from target
 		this.movePos = 0; // index of move in DNA
 		this.colider = new Colider(this.x, this.y, this.r);
+
         if(dna)
         {
             this.dna = dna;
@@ -26,7 +29,7 @@ class Unit
         {
             this.dna = [];
             for(let i = 0; i < TIME+100; i++)
-            {``
+            {
                 this.dna.push(Rand(-1,2));
             }
         }
