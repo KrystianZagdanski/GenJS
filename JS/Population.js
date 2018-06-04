@@ -23,7 +23,7 @@ class Population
     */
     createPopulation()
     {
-        for(var i = 0; i < POPULATION_SIZE; i++)
+        for(let i = 0; i < POPULATION_SIZE; i++)
         {
             this.units[i] = new Unit(startPoint.x, startPoint.y, 10);
             alive += 1;
@@ -63,7 +63,6 @@ class Population
             else
                 return 0;
         });
-        //this.units.forEach((e)=>{console.log(e.fitness);}); // test
     }
     /* 
         Rewrite best 15% of population
@@ -145,7 +144,7 @@ class Population
             r = Math.random();
             if(r > 0.92)
             {
-                lvl = Rand(1,10); // change 1 - 9 parts of DNA
+                lvl = Rand(1,5); // change 1 - 4 parts of DNA
                 while(0 < lvl)
                 {
                     this.newUnits[i].dna[Rand(0,this.newUnits[i].dna.length)] = Rand(-1,2);

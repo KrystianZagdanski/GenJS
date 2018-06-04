@@ -5,7 +5,7 @@ class Circle
 		this.x = x;
 		this.y = y;
 		this.r = r;
-		this.colider = new Colider(x, y, r);
+		this.collider = new Collider(x, y, r);
 		if(color)
 			this.color = color;
 		else
@@ -28,7 +28,7 @@ class Squer
 		this.y = y;
 		this.w = w;
 		this.h = h;
-		this.colider = new Colider(x, y, w, h);
+		this.collider = new Collider(x, y, w, h);
 		if(color)
 			this.color = color;
 		else

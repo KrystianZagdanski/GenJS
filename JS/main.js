@@ -1,26 +1,21 @@
 // config
 const TIME = 10*60; //Time to complete task
-const map = map4; //Curent map
-var stop = false; // test
+const map = map1; //Current map
+// config end
 
-var gen = 0; // generation counter
-var timer = TIME;
-var alive = 0; // number of alive units
+let gen = 0; // generation counter
+let timer = TIME;
+let alive = 0; // number of alive units
 
-var target; // meta circle
-var startPoint = {x: 100, y: canvasH/2};
-var obstacles = []; // object on the map
-var pop = new Population();
+let target; // meta circle
+let startPoint = {x: 100, y: canvasH/2};
+let obstacles = []; // object on the map
+let pop = new Population();
 map.open(); // prepare map
-
-function Stop() // test
-{
-	stop = !stop;
-}
 
 function drawMenu() // draw top left info text
 {
-	var x = 10, y = 24;
+	let x = 10, y = 24;
 	ctx.fillStyle = "#fff";
 	ctx.font = "24px Verdana Bold";
 	ctx.fillText("Gen: "+gen,x,y);
@@ -55,9 +50,9 @@ function Rand(min, max)
 
 function Distance(a,b) // return distace betwen 2 circles
 {
-	var dx = a.x - b.x;
-	var dy = a.y - b.y;
-	var dis = Math.sqrt(dx * dx + dy * dy);
+	let dx = a.x - b.x;
+	let dy = a.y - b.y;
+	let dis = Math.sqrt(dx * dx + dy * dy);
 	return dis;
 }
 
@@ -74,76 +69,75 @@ function setValues() // set values for new test
 
 function Update()
 {
-	if(!stop) // test
+	
+	/*
+		Create new population
+	*/
+	if(alive <= 0 || timer == 0)
 	{
-		/*
-			Create new population
-		*/
-		if(alive <= 0 || timer == 0)
-		{
-			pop.calculateFitness();
-			pop.sort();
-			//console.log("Sorted:", pop.units);
-			pop.rewrite();
-			//console.log("rewrite:", pop.newUnits);
-			pop.crossover();
-			//console.log("crossover:", pop.newUnits);
-			pop.mutate();
-			//console.log("mute:", pop.newUnits);
-			pop.applyNewPopulation();
-			//console.log("apply:", pop.newUnits, pop.units);
-			setValues();
-		}
-
-		/*
-			Update
-		*/
-		for(let i = 0; i < POPULATION_SIZE; i++)
-		{
-			pop.units[i].move();
-
-			// check if Unit find solution
-			if(!pop.units[i].win && pop.units[i].colider.colideWith(target))
-			{
-				pop.units[i].win = true;
-				score++;
-				alive--;
-				if(pop.units[i].ttc < bestTime)
-					bestTime = pop.units[i].ttc;
-				if(firstGoal == -1)
-					firstGoal = gen;
-				if(score >= Math.round(POPULATION_SIZE/2) && above50 == -1)
-					above50 = gen;
-				if(score >= Math.round(POPULATION_SIZE*0.8) && above80 == -1)
-					above80 = gen;
-			}
-
-			// detect colision 
-			for(let x = 0; x < obstacles.length; x++)
-			{
-				//console.log(pop.units[i], obstacles[x], pop.units[i].colider.colideWith(obstacles[x]));	
-				if(pop.units[i].alive && pop.units[i].colider.colideWith(obstacles[x]))
-				{
-					pop.units[i].alive = false;
-					alive--;
-					break;
-				}
-			}
-		}
-
-		/*
-			Draw
-		*/
-		map.draw();
-		for(var i = POPULATION_SIZE-1; i >= 0 ; i--)
-		{
-			pop.units[i].draw();
-		}
-		drawMenu();
-
-		if(timer > 0)
-			timer -= 1;
+		pop.calculateFitness();
+		pop.sort();
+		//console.log("Sorted:", pop.units);
+		pop.rewrite();
+		//console.log("rewrite:", pop.newUnits);
+		pop.crossover();
+		//console.log("crossover:", pop.newUnits);
+		pop.mutate();
+		//console.log("mute:", pop.newUnits);
+		pop.applyNewPopulation();
+		//console.log("apply:", pop.newUnits, pop.units);
+		setValues();
 	}
+
+	/*
+		Update
+	*/
+	for(let i = 0; i < POPULATION_SIZE; i++)
+	{
+		pop.units[i].move();
+
+		// check if Unit find solution
+		if(!pop.units[i].win && pop.units[i].collider.colideWith(target))
+		{
+			pop.units[i].win = true;
+			score++;
+			alive--;
+			if(pop.units[i].ttc < bestTime)
+				bestTime = pop.units[i].ttc;
+			if(firstGoal == -1)
+				firstGoal = gen;
+			if(score >= Math.round(POPULATION_SIZE/2) && above50 == -1)
+				above50 = gen;
+			if(score >= Math.round(POPULATION_SIZE*0.8) && above80 == -1)
+				above80 = gen;
+		}
+
+		// detect colision 
+		for(let x = 0; x < obstacles.length; x++)
+		{
+			//console.log(pop.units[i], obstacles[x], pop.units[i].collider.colideWith(obstacles[x]));	
+			if(pop.units[i].alive && pop.units[i].collider.colideWith(obstacles[x]))
+			{
+				pop.units[i].alive = false;
+				alive--;
+				break;
+			}
+		}
+	}
+
+	/*
+		Draw
+	*/
+	map.draw();
+	for(let i = POPULATION_SIZE-1; i >= 0 ; i--)
+	{
+		pop.units[i].draw();
+	}
+	drawMenu();
+
+	if(timer > 0)
+		timer -= 1;
+
 	//update (60FPS)
 	requestAnimationFrame(Update);
 }

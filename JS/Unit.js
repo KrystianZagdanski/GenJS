@@ -19,7 +19,7 @@ class Unit
 		this.distance = 999999; // distance from target (curent)
 		this.bestDistance = 999999; // closest distance from target
 		this.movePos = 0; // index of move in DNA
-		this.colider = new Colider(this.x, this.y, this.r);
+		this.collider = new Collider(this.x, this.y, this.r);
 
         if(dna)
         {
@@ -52,7 +52,7 @@ class Unit
 			this.rotation %= 360;
 			this.x += this.speed * Math.cos(this.rotation * Math.PI / 180);
     		this.y += this.speed * Math.sin(this.rotation * Math.PI / 180);
-			this.colider.update(this.x, this.y, this.r);
+			this.collider.update(this.x, this.y, this.r);
 			
 			this.ttc++;
     		this.movePos++;

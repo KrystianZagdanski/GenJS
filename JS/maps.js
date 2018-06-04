@@ -1,5 +1,5 @@
-var map1, map2, map3, map4;
-var strc = [];
+let map1, map2, map3, map4;
+let strc = [];
 
 function Map(start, meta, struct)
 {
