@@ -26,7 +26,7 @@ class Population
         for(let i = 0; i < POPULATION_SIZE; i++)
         {
             this.units[i] = new Unit(startPoint.x, startPoint.y, 10);
-            alive += 1;
+            alive += 1; // alive units counter
         }
     }
     /*
@@ -86,21 +86,41 @@ class Population
     */
     select()
     {
-        let i = 0, r;  
-        let sum = this.units[0].fitness;
+        // let i = 0, r;  
+        // let sum = this.units[0].fitness;
+        // let fitnessSum = 0;
+        // for(let i = 0; i < this.units.length; i++)
+        // {
+        //     fitnessSum += this.units[i].fitness;
+        // }
+
+        // r = Rand(0, fitnessSum+1);
+
+        // while(sum < r && i+1 < POPULATION_SIZE)
+        // {
+        //     sum += this.units[++i].fitness;
+        // }
+        // return i;
+
+        let unitIndex = 0;
         let fitnessSum = 0;
-        for(let i = 0; i < this.units.length; i++)
+        // calculate max fitness
+        for(let a = 0; a < this.units.length; a++)
         {
-            fitnessSum += this.units[i].fitness;
+            fitnessSum += this.units[a].fitness;
         }
 
-        r = Rand(0, fitnessSum+1);
-
-        while(sum < r && i+1 < POPULATION_SIZE)
+        while(unitIndex < this.units.length-2)
         {
-            sum += this.units[++i].fitness;
+            // select random weighted index
+            if(Rand(0, fitnessSum) < this.units[unitIndex].fitness)
+            {
+                return unitIndex;
+            }
+
+            fitnessSum -= this.units[unitIndex++].fitness;
         }
-        return i;
+        return unitIndex;
         
     }
     /* 

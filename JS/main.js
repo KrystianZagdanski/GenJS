@@ -1,6 +1,6 @@
 // config
 const TIME = 10*60; //Time to complete task
-const map = map1; //Current map
+const map = map3; //Current map
 // config end
 
 let gen = 0; // generation counter
